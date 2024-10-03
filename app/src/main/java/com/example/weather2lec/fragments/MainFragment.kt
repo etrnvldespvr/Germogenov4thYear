@@ -1,8 +1,13 @@
 package com.example.weather2lec.fragments
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +24,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.weather2lec.Adapters.VpAdapter
 import com.example.weather2lec.Adapters.WeatherModel
+import com.example.weather2lec.DialogManager
 import com.example.weather2lec.MainViewModel
 import com.example.weather2lec.R
 import com.example.weather2lec.databinding.FragmentMainBinding
@@ -60,7 +66,11 @@ class MainFragment : Fragment() {
         checkPermission()
         init()
         updateCurrentCard()
-        getLocation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkLocation()
     }
 
     private fun init() = with(binding){
@@ -72,8 +82,32 @@ class MainFragment : Fragment() {
         }.attach()
         ibSync.setOnClickListener {
             tabLayout.selectTab(tabLayout.getTabAt(0))
-            getLocation()
+            checkLocation()
         }
+        ibSearch.setOnClickListener{
+            DialogManager.searchByNameDialog(requireContext(), object : DialogManager.Listener{
+                override fun onClick(name: String?) {
+                    name?.let { it1 -> requestWeatherData(it1) }
+                }
+            })
+        }
+    }
+
+    private fun checkLocation(){
+        if(isLocationEnabled()){
+            getLocation()
+        } else {
+            DialogManager.locationSettingsDialog(requireContext(), object : DialogManager.Listener{
+                override fun onClick(name: String?) {
+                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }
+            })
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean{
+        val lm = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     private fun getLocation(){

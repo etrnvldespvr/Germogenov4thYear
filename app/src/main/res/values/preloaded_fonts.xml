@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/aubrey</item>
+        <item>@font/didact_gothic</item>
+        <item>@font/mitr</item>
+        <item>@font/mitr_extralight</item>
+        <item>@font/orienta</item>
+        <item>@font/strait</item>
+        <item>@font/syne</item>
+        <item>@font/ubuntu</item>
+    </array>
+</resources>

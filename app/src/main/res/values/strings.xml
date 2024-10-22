@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">JPCTip </string>
+    <string name="calculate_tip">Подсчёт чаевых</string>
+    <string name="tip_amount">Чаевые</string>
+    <string name="bill_amount">Счёт</string>
+</resources>
